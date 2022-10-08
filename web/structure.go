@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/Dynam1cNET/gosumemory-stripped/memory"
 	"github.com/k0kubun/pp"
-	"github.com/l3lackShark/gosumemory/memory"
 )
 
-//SetupStructure sets up ws and json output
+// SetupStructure sets up ws and json output
 func SetupStructure() {
 	var err error
 	type wsStruct struct { //order sets here

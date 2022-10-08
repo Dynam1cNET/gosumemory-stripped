@@ -8,13 +8,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Dynam1cNET/gosumemory-stripped/config"
+	"github.com/Dynam1cNET/gosumemory-stripped/memory"
 	"github.com/gorilla/websocket"
-	"github.com/l3lackShark/gosumemory/config"
-	"github.com/l3lackShark/gosumemory/memory"
 	"github.com/spf13/cast"
 )
 
-//JSONByte contains data that will be sent to the client
+// JSONByte contains data that will be sent to the client
 var JSONByte []byte
 
 var upgrader = websocket.Upgrader{
@@ -58,7 +58,7 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//SetupRoutes creates websocket connection
+// SetupRoutes creates websocket connection
 func SetupRoutes() {
 	http.HandleFunc("/ws", wsEndpoint)
 }
@@ -67,7 +67,7 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
-//HTTPServer handles json and static files output
+// HTTPServer handles json and static files output
 func HTTPServer() {
 
 	for memory.DynamicAddresses.IsReady != true {

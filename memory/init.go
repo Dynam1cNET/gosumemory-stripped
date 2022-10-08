@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/l3lackShark/gosumemory/config"
-	"github.com/l3lackShark/gosumemory/injctr"
-	"github.com/l3lackShark/gosumemory/mem"
+	"github.com/Dynam1cNET/gosumemory-stripped/config"
+	"github.com/Dynam1cNET/gosumemory-stripped/injctr"
+	"github.com/Dynam1cNET/gosumemory-stripped/mem"
 	"github.com/spf13/cast"
 )
 

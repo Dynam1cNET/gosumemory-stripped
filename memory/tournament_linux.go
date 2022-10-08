@@ -1,11 +1,12 @@
-//+build linux
+//go:build linux
+// +build linux
 
 package memory
 
 import (
 	"errors"
 
-	"github.com/l3lackShark/gosumemory/mem"
+	"github.com/Dynam1cNET/gosumemory-stripped/mem"
 )
 
 func resolveTourneyClients(procs []mem.Process) ([]mem.Process, error) {

@@ -14,7 +14,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/l3lackShark/gosumemory/memory"
+	"github.com/Dynam1cNET/gosumemory-stripped/memory"
 	"github.com/spf13/cast"
 )
 

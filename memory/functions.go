@@ -12,33 +12,33 @@ import (
 
 	"github.com/spf13/cast"
 
+	"github.com/Dynam1cNET/gosumemory-stripped/mem"
 	"github.com/k0kubun/pp"
-	"github.com/l3lackShark/gosumemory/mem"
 )
 
 func modsResolver(xor uint32) string {
 	return Mods(xor).String()
 }
 
-//UpdateTime Intervall between value updates
+// UpdateTime Intervall between value updates
 var UpdateTime int
 
-//UnderWine?
+// UnderWine?
 var UnderWine bool
 
-//MemCycle test
+// MemCycle test
 var MemCycle bool
 var isTournamentMode bool
 var tourneyProcs []mem.Process
 var tourneyErr error
 
-//Were we in the Result Screen?
+// Were we in the Result Screen?
 var dirtyResults bool = false
 
-//var proc, procerr = kiwi.GetProcessByFileName("osu!.exe")
+// var proc, procerr = kiwi.GetProcessByFileName("osu!.exe")
 var leaderStart int32
 
-//SongsFolderPath is full path to osu! Songs. Gets set automatically on Windows (through memory)
+// SongsFolderPath is full path to osu! Songs. Gets set automatically on Windows (through memory)
 var SongsFolderPath string
 
 var allProcs []mem.Process
@@ -46,7 +46,7 @@ var process mem.Process
 var procerr error
 var tempRetries int32
 
-//Init the whole thing and get osu! memory values to start working with it.
+// Init the whole thing and get osu! memory values to start working with it.
 func Init() {
 	if UnderWine == true || runtime.GOOS != "windows" { //Arrays start at 0xC in Linux for some reason, has to be wine specific
 		leaderStart = 0xC

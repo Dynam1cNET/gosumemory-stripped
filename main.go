@@ -8,13 +8,13 @@ import (
 
 	"github.com/spf13/cast"
 
-	"github.com/l3lackShark/gosumemory/config"
+	"github.com/Dynam1cNET/gosumemory-stripped/config"
 
-	"github.com/l3lackShark/gosumemory/mem"
-	"github.com/l3lackShark/gosumemory/memory"
-	"github.com/l3lackShark/gosumemory/pp"
-	"github.com/l3lackShark/gosumemory/updater"
-	"github.com/l3lackShark/gosumemory/web"
+	"github.com/Dynam1cNET/gosumemory-stripped/mem"
+	"github.com/Dynam1cNET/gosumemory-stripped/memory"
+	"github.com/Dynam1cNET/gosumemory-stripped/pp"
+	"github.com/Dynam1cNET/gosumemory-stripped/updater"
+	"github.com/Dynam1cNET/gosumemory-stripped/web"
 )
 
 func main() {
