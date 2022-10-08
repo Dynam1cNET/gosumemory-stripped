@@ -1,38 +1,24 @@
 package main
 
 import (
-	"flag"
+	"fmt"
+	"github.com/Dynam1cNET/gosumemory-stripped/db"
 	"log"
 	"os"
 	"runtime"
 
-	"github.com/spf13/cast"
-
-	"github.com/Dynam1cNET/gosumemory-stripped/config"
-
 	"github.com/Dynam1cNET/gosumemory-stripped/mem"
 	"github.com/Dynam1cNET/gosumemory-stripped/memory"
 	"github.com/Dynam1cNET/gosumemory-stripped/pp"
-	"github.com/Dynam1cNET/gosumemory-stripped/updater"
-	"github.com/Dynam1cNET/gosumemory-stripped/web"
 )
 
 func main() {
-	config.Init()
-	updateTimeFlag := flag.Int("update", cast.ToInt(config.Config["update"]), "How fast should we update the values? (in milliseconds)")
-	shouldWeUpdate := flag.Bool("autoupdate", true, "Should we auto update the application?")
-	isRunningInWINE := flag.Bool("wine", cast.ToBool(config.Config["wine"]), "Running under WINE?")
-	songsFolderFlag := flag.String("path", config.Config["path"], `Path to osu! Songs directory ex: /mnt/ps3drive/osu\!/Songs`)
-	memDebugFlag := flag.Bool("memdebug", cast.ToBool(config.Config["memdebug"]), `Enable verbose memory debugging?`)
-	memCycleTestFlag := flag.Bool("memcycletest", cast.ToBool(config.Config["memcycletest"]), `Enable memory cycle time measure?`)
-	disablecgo := flag.Bool("cgodisable", cast.ToBool(config.Config["cgodisable"]), `Disable everything non memory-reader related? (pp counters)`)
-	flag.Parse()
-	cgo := *disablecgo
-	mem.Debug = *memDebugFlag
-	memory.MemCycle = *memCycleTestFlag
-	memory.UpdateTime = *updateTimeFlag
-	memory.SongsFolderPath = *songsFolderFlag
-	memory.UnderWine = *isRunningInWINE
+	cgo := false
+	mem.Debug = false
+	memory.MemCycle = false
+	memory.UpdateTime = 0
+	memory.SongsFolderPath = "auto"
+	memory.UnderWine = false
 	if runtime.GOOS != "windows" && memory.SongsFolderPath == "auto" {
 		log.Fatalln("Please specify path to osu!Songs (see --help)")
 	}
@@ -41,25 +27,69 @@ func main() {
 			log.Fatalln(`Specified Songs directory does not exist on the system! (try setting to "auto" if you are on Windows or make sure that the path is correct)`)
 		}
 	}
-	if *shouldWeUpdate == true {
-		updater.DoSelfUpdate()
-	}
 
 	go memory.Init()
-	// err := db.InitDB()
-	// if err != nil {
-	// 	log.Println(err)
-	// 	time.Sleep(5 * time.Second)
-	// 	os.Exit(1)
-	// }
-	go web.SetupStructure()
-	go web.SetupRoutes()
+	err := db.InitDB()
+	if err != nil {
+		log.Println(err)
+		// 	time.Sleep(5 * time.Second)
+		// 	os.Exit(1)
+	}
+
 	if !cgo {
 		go pp.GetData()
 		go pp.GetFCData()
 		go pp.GetMaxData()
 		go pp.GetEditorData()
 	}
-	web.HTTPServer()
+	//var oldLen = 0
+	//var count = 0
+	//for {
+	//	if memory.MenuData.OsuStatus == 2 {
+	//		for memory.GameplayData.KeyOverlay.K1.IsPressed || memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed || memory.GameplayData.KeyOverlay.M2.IsPressed {
+	//			//log.Println(fmt.Sprint(memory.GameplayData.PP.Pp))
+	//			//log.Println(fmt.Sprint(memory.MenuData.OsuStatus))
+	//			if len(memory.GameplayData.Hits.HitErrorArray) != oldLen {
+	//				count++
+	//				oldLen = len(memory.GameplayData.Hits.HitErrorArray)
+	//				if oldLen > 0 {
+	//					log.Println(
+	//						fmt.Sprintf("|%-6d", memory.GameplayData.Hits.HitErrorArray[oldLen-1]),
+	//						fmt.Sprintf("|%-6d", len(memory.GameplayData.Hits.HitErrorArray)),
+	//						fmt.Sprintf("|%-6d", count),
+	//						fmt.Sprintf("|%6dpp", memory.GameplayData.PP.Pp))
+	//				} else {
+	//					count = 0
+	//				}
+	//
+	//			}
+	//		}
+	//	} else {
+	//		oldLen = 0
+	//		count = 0
+	//
+	//	}
+	//}
+	for {
+		if memory.MenuData.OsuStatus == 2 {
+			if memory.GameplayData.KeyOverlay.K1.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed {
+				fmt.Printf("\r|%-3s|%-3s|", "###", "")
+				continue
+			}
+			if memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M2.IsPressed {
+				fmt.Printf("\r|%-3s|%-3s|", "", "###")
+				continue
+			}
+			if memory.GameplayData.KeyOverlay.K1.IsPressed && memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed && memory.GameplayData.KeyOverlay.M2.IsPressed {
+				fmt.Printf("\r|%-3s|%-3s|", "###", "###")
+				continue
+			}
+			if !memory.GameplayData.KeyOverlay.K1.IsPressed && !memory.GameplayData.KeyOverlay.K2.IsPressed && !memory.GameplayData.KeyOverlay.M1.IsPressed && !memory.GameplayData.KeyOverlay.M2.IsPressed {
+				fmt.Printf("\r|%-3s|%-3s|", "", "")
+				continue
+			}
+
+		}
+	}
 
 }
