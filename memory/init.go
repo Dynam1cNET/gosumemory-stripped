@@ -10,10 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dynam1cNET/gosumemory-stripped/config"
-	"github.com/Dynam1cNET/gosumemory-stripped/injctr"
 	"github.com/Dynam1cNET/gosumemory-stripped/mem"
-	"github.com/spf13/cast"
 )
 
 var osuProcessRegex = regexp.MustCompile(`.*osu!\.exe.*`)
@@ -71,7 +68,7 @@ func initBase() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("[MEMORY] Got osu!status addr...")
+	fmt.Println("[MEMORY] Reading...")
 
 	if runtime.GOOS == "windows" && SongsFolderPath == "auto" {
 		err = mem.Read(process,
@@ -85,7 +82,7 @@ func initBase() error {
 			log.Fatalln(err)
 		}
 	}
-	fmt.Println("[MEMORY] Songs folder:", SongsFolderPath)
+	fmt.Println("[MEMORY] Found Songs folder:", SongsFolderPath)
 	pepath, err := process.ExecutablePath()
 	if err != nil {
 		panic(err)
@@ -130,7 +127,7 @@ func initBase() error {
 
 	}
 
-	fmt.Println("[MEMORY] Resolving patterns...")
+	//fmt.Println("[MEMORY] Resolving patterns...")
 	err = mem.ResolvePatterns(process, &patterns)
 	if err != nil {
 		return err
@@ -138,18 +135,10 @@ func initBase() error {
 
 	SettingsData.Folders.Songs = SongsFolderPath
 
-	fmt.Println("[MEMORY] Got all patterns...")
-	fmt.Println("WARNING: Mania pp calcualtion is experimental and only works if you choose mania gamemode in the SongSelect!")
-	fmt.Println(fmt.Sprintf("Initialization complete, you can now visit http://%s or add it as a browser source in OBS", config.Config["serverip"]))
+	fmt.Println("[MEMORY] Done!")
+	//fmt.Println("WARNING: Mania pp calcualtion is experimental and only works if you choose mania gamemode in the SongSelect!")
+	//fmt.Println(fmt.Sprintf("Initialization complete, you can now visit http://%s or add it as a browser source in OBS", "IP ADDRESS")) // TODO Add back ip address
 	DynamicAddresses.IsReady = true
-	if cast.ToBool(config.Config["enabled"]) {
-		err = injctr.Injct(process.Pid())
-		if err != nil {
-			log.Printf("Failed to inject into osu's process, in game overlay will be unavailabe. %e\n", err)
-		}
-	} else {
-		fmt.Println("[MEMORY] In-Game overlay is disabled, but could be enabled in config.ini!")
-	}
 
 	return nil
 }

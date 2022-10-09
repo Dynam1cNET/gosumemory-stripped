@@ -16,7 +16,7 @@ func main() {
 	cgo := false
 	mem.Debug = false
 	memory.MemCycle = false
-	memory.UpdateTime = 0
+	memory.UpdateTime = 20
 	memory.SongsFolderPath = "auto"
 	memory.UnderWine = false
 	if runtime.GOOS != "windows" && memory.SongsFolderPath == "auto" {
@@ -42,54 +42,55 @@ func main() {
 		go pp.GetMaxData()
 		go pp.GetEditorData()
 	}
-	//var oldLen = 0
-	//var count = 0
-	//for {
-	//	if memory.MenuData.OsuStatus == 2 {
-	//		for memory.GameplayData.KeyOverlay.K1.IsPressed || memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed || memory.GameplayData.KeyOverlay.M2.IsPressed {
-	//			//log.Println(fmt.Sprint(memory.GameplayData.PP.Pp))
-	//			//log.Println(fmt.Sprint(memory.MenuData.OsuStatus))
-	//			if len(memory.GameplayData.Hits.HitErrorArray) != oldLen {
-	//				count++
-	//				oldLen = len(memory.GameplayData.Hits.HitErrorArray)
-	//				if oldLen > 0 {
-	//					log.Println(
-	//						fmt.Sprintf("|%-6d", memory.GameplayData.Hits.HitErrorArray[oldLen-1]),
-	//						fmt.Sprintf("|%-6d", len(memory.GameplayData.Hits.HitErrorArray)),
-	//						fmt.Sprintf("|%-6d", count),
-	//						fmt.Sprintf("|%6dpp", memory.GameplayData.PP.Pp))
-	//				} else {
-	//					count = 0
-	//				}
-	//
-	//			}
-	//		}
-	//	} else {
-	//		oldLen = 0
-	//		count = 0
-	//
-	//	}
-	//}
+	var oldLen = 0
+	var count = 0
 	for {
 		if memory.MenuData.OsuStatus == 2 {
-			if memory.GameplayData.KeyOverlay.K1.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed {
-				fmt.Printf("\r|%-3s|%-3s|", "###", "")
-				continue
+			//for memory.GameplayData.KeyOverlay.K1.IsPressed || memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed || memory.GameplayData.KeyOverlay.M2.IsPressed {
+			//log.Println(fmt.Sprint(memory.GameplayData.PP.Pp))
+			//log.Println(fmt.Sprint(memory.MenuData.OsuStatus))
+			if len(memory.GameplayData.Hits.HitErrorArray) != oldLen {
+				count++
+				oldLen = len(memory.GameplayData.Hits.HitErrorArray)
+				if oldLen > 0 {
+					log.Println(
+						fmt.Sprintf("|%-6d", memory.GameplayData.Hits.HitErrorArray[oldLen-1]),
+						fmt.Sprintf("|%-6d", len(memory.GameplayData.Hits.HitErrorArray)),
+						fmt.Sprintf("|%-6d", count),
+						fmt.Sprintf("|%6dpp", memory.GameplayData.PP.Pp))
+				} else {
+					count = 0
+				}
+
+				//}
 			}
-			if memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M2.IsPressed {
-				fmt.Printf("\r|%-3s|%-3s|", "", "###")
-				continue
-			}
-			if memory.GameplayData.KeyOverlay.K1.IsPressed && memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed && memory.GameplayData.KeyOverlay.M2.IsPressed {
-				fmt.Printf("\r|%-3s|%-3s|", "###", "###")
-				continue
-			}
-			if !memory.GameplayData.KeyOverlay.K1.IsPressed && !memory.GameplayData.KeyOverlay.K2.IsPressed && !memory.GameplayData.KeyOverlay.M1.IsPressed && !memory.GameplayData.KeyOverlay.M2.IsPressed {
-				fmt.Printf("\r|%-3s|%-3s|", "", "")
-				continue
-			}
+		} else {
+			oldLen = 0
+			count = 0
 
 		}
 	}
+
+	//for {
+	//	if memory.MenuData.OsuStatus == 2 {
+	//		if memory.GameplayData.KeyOverlay.K1.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed {
+	//			fmt.Printf("\r|%-3s|%-3s|", "###", "")
+	//			continue
+	//		}
+	//		if memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M2.IsPressed {
+	//			fmt.Printf("\r|%-3s|%-3s|", "", "###")
+	//			continue
+	//		}
+	//		if memory.GameplayData.KeyOverlay.K1.IsPressed && memory.GameplayData.KeyOverlay.K2.IsPressed || memory.GameplayData.KeyOverlay.M1.IsPressed && memory.GameplayData.KeyOverlay.M2.IsPressed {
+	//			fmt.Printf("\r|%-3s|%-3s|", "###", "###")
+	//			continue
+	//		}
+	//		if !memory.GameplayData.KeyOverlay.K1.IsPressed && !memory.GameplayData.KeyOverlay.K2.IsPressed && !memory.GameplayData.KeyOverlay.M1.IsPressed && !memory.GameplayData.KeyOverlay.M2.IsPressed {
+	//			fmt.Printf("\r|%-3s|%-3s|", "", "")
+	//			continue
+	//		}
+	//
+	//	}
+	//}
 
 }
